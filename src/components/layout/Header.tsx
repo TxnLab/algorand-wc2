@@ -1,6 +1,33 @@
+'use client'
+
+import { useConnect } from '@web3modal/sign-react'
 import Image from 'next/image'
+import { useState } from 'react'
 
 export default function Header() {
+  const [disabled, setDisabled] = useState(false)
+  const { connect, data, error, loading } = useConnect({
+    requiredNamespaces: {
+      algorand: {
+        methods: ['algo_signTxn'],
+        chains: ['algorand:SGO1GKSzyE7IEPItTxCByw9x8FmnrCDe'], // Testnet
+        events: ['chainChanged', 'accountsChanged']
+      }
+    }
+  })
+
+  const handleConnect = async () => {
+    try {
+      setDisabled(true)
+      const session = await connect()
+      console.info(session)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setDisabled(false)
+    }
+  }
+
   return (
     <header className="bg-gray-900">
       <nav
@@ -11,13 +38,22 @@ export default function Header() {
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Home</span>
             <Image
-              className="h-8 w-auto invert"
-              src="https://tailwindui.com/img/logos/mark.svg"
+              src="https://walletconnect.com/_next/static/media/logo_mark.84dd8525.svg"
               alt=""
               width={32}
               height={32}
             />
           </a>
+        </div>
+        <div className="flex">
+          <button
+            type="button"
+            className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-500"
+            onClick={handleConnect}
+            disabled={disabled}
+          >
+            Connect wallet
+          </button>
         </div>
       </nav>
     </header>

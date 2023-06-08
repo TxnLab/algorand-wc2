@@ -1,5 +1,6 @@
 import { Inter } from 'next/font/google'
 import Header from '@/components/layout/Header'
+import Web3Modal from '@/components/layout/Web3Modal'
 import { classNames } from '@/utils/tailwind'
 import './globals.css'
 
@@ -16,6 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={classNames(inter.className, 'bg-gray-900 min-h-screen')}>
         <Header />
         {children}
+
+        <Web3Modal />
       </body>
     </html>
   )
