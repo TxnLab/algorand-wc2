@@ -40,15 +40,15 @@ export default function Header() {
             <Image
               src="https://walletconnect.com/_next/static/media/logo_mark.84dd8525.svg"
               alt=""
-              width={32}
-              height={32}
+              width={36}
+              height={36}
             />
           </a>
         </div>
         <div className="flex">
           <button
             type="button"
-            className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-500"
+            className="rounded-md bg-indigo-500 px-3.5 py-2 sm:px-4 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-500"
             onClick={handleConnect}
             disabled={disabled}
           >
