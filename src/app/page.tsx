@@ -1,4 +1,6 @@
+import PageContent from '@/components/page/Content'
 import PageHeader from '@/components/page/Header'
+import Links from '@/components/page/Links'
 
 export default function Home() {
   return (
@@ -17,6 +19,11 @@ export default function Home() {
       </div>
 
       <PageHeader />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <PageContent />
+        <Links />
+      </div>
     </main>
   )
 }
