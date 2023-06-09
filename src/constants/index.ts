@@ -13,11 +13,13 @@ export const DEFAULT_APP_METADATA = {
   icons: ['https://algorand-wc2.vercel.app/algo.svg']
 }
 
-export const DEFAULT_CHAINS = [
-  'algorand:mFgazF-2uRS1tMiL9dsj01hJGySEmPN2',
-  'algorand:SGO1GKSzyE7IEPItTxCByw9x8FmnrCDe',
-  'algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73k'
-]
+export enum ALGORAND_CHAINS {
+  Mainnet = 'algorand:wGHE2Pwdvd7S12BL5FaOP20EGYesN73k',
+  Testnet = 'algorand:SGO1GKSzyE7IEPItTxCByw9x8FmnrCDe',
+  Betanet = 'algorand:mFgazF-2uRS1tMiL9dsj01hJGySEmPN2'
+}
+
+export const DEFAULT_CHAINS = [ALGORAND_CHAINS.Testnet]
 
 export const DEFAULT_REQUIRED_NAMESPACES = {
   algorand: {
