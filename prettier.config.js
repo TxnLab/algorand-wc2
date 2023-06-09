@@ -5,8 +5,10 @@ module.exports = {
   trailingComma: 'none',
   importOrder: [
     '^@/src/components/(.*)$',
+    '^@/src/hooks/(.*)$',
     '^@/src/utils/(.*)$',
-    '^@/src/styles/(.*)$',
+    '^@/src/constants/(.*)$',
+    '^@/src/context/(.*)$',
     '^@/src/types/(.*)$',
     '^@/(.*)$',
     '^[./]'
