@@ -71,10 +71,9 @@ export default function useTransaction() {
         amount: algosToMicroalgos(Number(amount)),
         suggestedParams
       })
-      console.log('transaction', transaction)
 
       const signTxnParams = getSignTxnRequestParams([{ txn: transaction }])
-      const request = formatJsonRpcRequest('algo_signTxn', [signTxnParams])
+      const request = formatJsonRpcRequest('algo_signTxn', signTxnParams)
 
       toast.loading('Waiting for user to sign...', { id: TOAST_ID, duration: Infinity })
 
