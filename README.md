@@ -1,34 +1,135 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Algorand + WalletConnect 2.0
 
-## Getting Started
+🔗 Live demo - https://algorand-wc2.vercel.app/
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+This is an example implementation of a React dApp using the standalone client for [WalletConnect](https://docs.walletconnect.com/2.0) v2 and [Web3Modal](https://web3modal.com/) to:
+
+- handle pairings
+- manage sessions
+- send JSON-RPC requests to a paired wallet
+
+It is built using [Next.js](https://nextjs.org/) v13 (App router) and incorporates modern tooling.
+
+<!-- 1. Connect a wallet with a QR code using the new [Web3Modal](https://web3modal.com/) library
+2. Sign transactions using the [Sign API](https://docs.walletconnect.com/2.0/web/sign/dapp-usage) -->
+
+## Key Components
+
+### WalletConnect client
+
+This implementation creates a React Context to manage the WalletConnect client and session state:
+
+- https://github.com/TxnLab/algorand-wc2/blob/main/src/context/ClientContext.tsx
+
+The client is initialized with a unique project ID, which can be obtained from [WalletConnect Cloud](https://cloud.walletconnect.com/).
+
+```ts
+import Client from '@walletconnect/sign-client'
+
+const client = await Client.init({
+  projectId: '<YOUR_PROJECT_ID>',
+  // optional parameters
+  relayUrl: '<YOUR RELAY URL>',
+  metadata: {
+    name: 'Example Dapp',
+    description: 'Example Dapp',
+    url: '#',
+    icons: ['https://walletconnect.com/walletconnect-logo.png']
+  }
+})
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Web3Modal
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[Web3Modal](https://web3modal.com/) is used to display the QR code or link to pair a wallet.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+By default it will suggest a variety of Ethereum wallets, but setting `explorerExcludedWalletIds` to `'ALL'` will disable this behavior. A full description of the available options can be found in the [documentation](https://docs.walletconnect.com/2.0/web/web3modal/react/sign-api/options).
 
-## Learn More
+```ts
+import { Web3Modal } from '@web3modal/standalone'
 
-To learn more about Next.js, take a look at the following resources:
+const web3Modal = new Web3Modal({
+  projectId: '<YOUR_PROJECT_ID>',
+  themeMode: 'light',
+  walletConnectVersion: 2,
+  explorerExcludedWalletIds: 'ALL'
+})
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Signing Requests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+The [Sign API](https://docs.walletconnect.com/2.0/web/sign/dapp-usage) is used to sign transactions, which are sent to the paired wallet as a JSON-RPC request. Algorand wallets currently support a single RPC method, `algo_signTxn`, which accepts an array of transaction objects for `params`.
 
-## Deploy on Vercel
+```ts
+// Simplified example
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+const request = {
+  id: 1, // unique integer
+  jsonrpc: '2.0',
+  method: 'algo_signTxn',
+  params: [
+    {
+      txn: '<BASE64_ENCODED_TRANSACTION>'
+      // optional properties
+    }
+    // other transaction objects
+  ]
+}
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+const signedTxns = await client.request({
+  chainId: 'algorand:SGO1GKSzyE7IEPItTxCByw9x8FmnrCDe', // Algorand Testnet
+  topic: session.topic,
+  request
+})
+
+const result = await algodClient.sendRawTransaction(signedTxns).do()
+```
+
+The signing logic for the simple pay transaction in this implementation can be found in:
+
+- https://github.com/TxnLab/algorand-wc2/blob/main/src/components/page/Transaction/Transaction.hooks.ts
+
+More transaction examples will be added soon.
+
+## Local Development
+
+Install the app's dependencies:
+
+```bash
+pnpm install
+```
+
+Set up your local environment variables:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Your `.env.local` file now contains the following environment variables:
+
+- `NEXT_PUBLIC_PROJECT_ID` (placeholder) - You can generate your own project ID at https://cloud.walletconnect.com
+- `NEXT_PUBLIC_RELAY_URL` (already set) - You can use the default relay server at `wss://relay.walletconnect.org`
+
+You may also set the following optional environment variables:
+
+- `NEXT_PUBLIC_NODE_URL` - Defaults to `https://testnet-api.algonode.cloud`
+- `NEXT_PUBLIC_NODE_PORT` - Defaults to `443`
+- `NEXT_PUBLIC_NODE_TOKEN` - Defaults to `''`
+
+Start the development server:
+
+```bash
+pnpm run dev
+```
+
+## Support
+
+If you have questions or need further guidance on migrating your Algorand dApp to WalletConnect 2.0, please join the Algorand Discord. The `#wallet-connect` channel is dedicated to discussions related to WalletConnect on Algorand.
+
+[Join Algorand Discord](https://discord.com/invite/algorand)
+
+## Author
+
+This example project was created by Doug Richar ([doug.algo](https://doug.algo.xyz)). You can reach me on Twitter [@drichar](https://twitter.com/drichar).
