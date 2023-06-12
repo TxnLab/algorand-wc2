@@ -1,17 +1,21 @@
 'use client'
 
 import Image from 'next/image'
+import useHydrated from '@/hooks/useHydrated'
 import useWalletConnectClient from '@/hooks/useWalletConnectClient'
+import { classNames } from '@/utils'
 
 export default function Header() {
   const { client, isInitializing, connect, disconnect, session } = useWalletConnectClient()
+
+  const isHydrated = useHydrated()
 
   const renderButton = () => {
     if (session) {
       return (
         <button
           type="button"
-          className="rounded-md bg-indigo-500 px-3.5 py-2 sm:px-4 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-500"
+          className="rounded-md bg-indigo-500 px-3.5 py-2 sm:px-4 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
           onClick={disconnect}
           disabled={!client || isInitializing}
         >
@@ -23,7 +27,10 @@ export default function Header() {
     return (
       <button
         type="button"
-        className="rounded-md bg-indigo-500 px-3.5 py-2 sm:px-4 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:hover:bg-indigo-500"
+        className={classNames(
+          !isHydrated || isInitializing ? 'invisible' : '',
+          'rounded-md bg-indigo-500 px-3.5 py-2 sm:px-4 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500'
+        )}
         onClick={() => connect()}
       >
         Connect wallet

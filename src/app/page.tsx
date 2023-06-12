@@ -20,7 +20,7 @@ export default function Home() {
 
       <PageHeader />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl pb-24 sm:pb-32 px-6 lg:px-8">
         <PageContent />
         <Links />
       </div>
