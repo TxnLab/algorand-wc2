@@ -25,7 +25,7 @@ export default function Transaction() {
               Send Transaction
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-400">
-              Send Algos from a connected address
+              Send Algos from a connected account
             </p>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
