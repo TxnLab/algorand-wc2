@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google'
 import Header from '@/components/layout/Header'
-import { ClientContextProvider } from '@/context/ClientContext'
-import { classNames } from '@/utils/tailwind'
+import Providers from '@/components/layout/Providers'
+import { classNames } from '@/utils'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -11,14 +11,14 @@ export const metadata = {
   description: 'Demonstrates how to use WalletConnect 2.0 with Algorand'
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <html lang="en">
       <body className={classNames(inter.className, 'bg-gray-900 min-h-screen')}>
-        <ClientContextProvider>
+        <Providers>
           <Header />
           {children}
-        </ClientContextProvider>
+        </Providers>
       </body>
     </html>
   )

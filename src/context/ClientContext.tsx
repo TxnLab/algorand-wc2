@@ -5,6 +5,7 @@ import { PairingTypes, SessionTypes } from '@walletconnect/types'
 import { getAppMetadata, getSdkError } from '@walletconnect/utils'
 import { Web3Modal } from '@web3modal/standalone'
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import useBalances from '@/hooks/useBalances'
 import {
   DEFAULT_APP_METADATA,
   DEFAULT_CHAINS,
@@ -13,6 +14,7 @@ import {
   DEFAULT_RELAY_URL,
   DEFAULT_REQUIRED_NAMESPACES
 } from '@/constants'
+import { AccountBalances } from '@/types/accounts'
 
 interface IContext {
   client: Client | undefined
@@ -23,8 +25,8 @@ interface IContext {
   relayerRegion: string
   pairings: PairingTypes.Struct[]
   accounts: string[]
-  // balances: AccountBalances
-  // isFetchingBalances: boolean
+  balances: AccountBalances
+  isFetchingBalances: boolean
   setRelayerRegion: any
 }
 
@@ -45,31 +47,33 @@ export const ClientContextProvider = ({ children }: { children: React.ReactNode 
   const [pairings, setPairings] = useState<PairingTypes.Struct[]>([])
   const [session, setSession] = useState<SessionTypes.Struct>()
 
-  // const [isFetchingBalances, setIsFetchingBalances] = useState(false)
   const [isInitializing, setIsInitializing] = useState(false)
   const prevRelayerValue = useRef<string>('')
 
-  // const [balances, setBalances] = useState<AccountBalances>({})
   const [accounts, setAccounts] = useState<string[]>([])
   const [relayerRegion, setRelayerRegion] = useState<string>(DEFAULT_RELAY_URL!)
 
+  const { balances, isFetchingBalances } = useBalances(accounts)
+
   const reset = () => {
     setSession(undefined)
-    // setBalances({})
     setAccounts([])
     setRelayerRegion(DEFAULT_RELAY_URL!)
   }
 
-  // @todo: getAccountBalances
-
   const onSessionConnected = useCallback(async (session: SessionTypes.Struct) => {
+    // temporary fix to filter duplicate accounts from chains I'm not requesting
+    let _session = { ...session }
+    _session.namespaces.algorand.accounts = _session.namespaces.algorand.accounts.filter(
+      (account) => DEFAULT_CHAINS.some((chain) => account.startsWith(chain))
+    )
+
     const allAccounts = Object.values(session.namespaces)
       .map((namespace) => namespace.accounts)
       .flat()
 
     setSession(session)
     setAccounts(allAccounts)
-    // await getAccountBalances(allAccounts)
   }, [])
 
   const connect = useCallback(
@@ -200,9 +204,11 @@ export const ClientContextProvider = ({ children }: { children: React.ReactNode 
   const contextValue = useMemo(
     () => ({
       accounts,
+      balances,
       client,
       connect,
       disconnect,
+      isFetchingBalances,
       isInitializing,
       pairings,
       relayerRegion,
@@ -211,9 +217,11 @@ export const ClientContextProvider = ({ children }: { children: React.ReactNode 
     }),
     [
       accounts,
+      balances,
       client,
       connect,
       disconnect,
+      isFetchingBalances,
       isInitializing,
       pairings,
       relayerRegion,
