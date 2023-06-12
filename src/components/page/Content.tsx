@@ -24,8 +24,8 @@ export default function Content() {
 
   return (
     <p className="max-w-2xl mx-auto mt-12 sm:text-lg text-center text-gray-300">
-      Click the &quot;Connect wallet&quot; button above to get started. Once connected, the returned{' '}
-      <code className="bg-white/10 rounded py-0.5 px-1">session</code> will be printed here.
+      Click the &quot;Connect wallet&quot; button above to get started. Once connected, you will be
+      able to send a basic pay transaction from a connected account.
     </p>
   )
 }
