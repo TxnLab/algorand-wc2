@@ -68,11 +68,11 @@ export const ClientContextProvider = ({ children }: { children: React.ReactNode 
       (account) => DEFAULT_CHAINS.some((chain) => account.startsWith(chain))
     )
 
-    const allAccounts = Object.values(session.namespaces)
+    const allAccounts = Object.values(_session.namespaces)
       .map((namespace) => namespace.accounts)
       .flat()
 
-    setSession(session)
+    setSession(_session)
     setAccounts(allAccounts)
   }, [])
 
