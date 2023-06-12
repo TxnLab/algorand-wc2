@@ -21,7 +21,7 @@ It is built using [Next.js](https://nextjs.org/) v13 (App router) and incorporat
 
 This implementation creates a React Context to manage the WalletConnect client and session state:
 
-- https://github.com/TxnLab/algorand-wc2/blob/main/src/context/ClientContext.tsx
+- [/src/context/ClientContext.tsx](https://github.com/TxnLab/algorand-wc2/blob/main/src/context/ClientContext.tsx)
 
 The client is initialized with a unique project ID, which can be obtained from [WalletConnect Cloud](https://cloud.walletconnect.com/).
 
@@ -87,9 +87,9 @@ const signedTxns = await client.request({
 const result = await algodClient.sendRawTransaction(signedTxns).do()
 ```
 
-The signing logic for the simple pay transaction in this implementation can be found in:
+The signing logic for the simple pay transaction in this example can be found in:
 
-- https://github.com/TxnLab/algorand-wc2/blob/main/src/components/page/Transaction/Transaction.hooks.ts
+- [/src/components/page/Transaction/Transaction.hooks.ts](https://github.com/TxnLab/algorand-wc2/blob/main/src/components/page/Transaction/Transaction.hooks.ts)
 
 More transaction examples will be added soon.
 
