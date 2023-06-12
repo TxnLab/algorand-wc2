@@ -21,7 +21,6 @@ export default function useTransaction() {
       try {
         return microalgosToAlgos(available)
       } catch (error) {
-        console.log('available', available)
         return 0
       }
     },
