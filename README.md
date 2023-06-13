@@ -60,7 +60,7 @@ const web3Modal = new Web3Modal({
 
 ### Signing Requests
 
-The [Sign API](https://docs.walletconnect.com/2.0/web/sign/dapp-usage) is used to sign transactions, which are sent to the paired wallet as a JSON-RPC request. Algorand wallets currently support a single RPC method, `algo_signTxn`, which accepts an array of transaction objects for `params`.
+The [Sign API](https://docs.walletconnect.com/2.0/web/sign/dapp-usage) is used to sign transactions, which are sent to the paired wallet as a JSON-RPC request. Algorand wallets currently support a single RPC method, `algo_signTxn`, which accepts a nested array of transaction objects for `params`.
 
 ```ts
 // Simplified example
@@ -70,11 +70,14 @@ const request = {
   jsonrpc: '2.0',
   method: 'algo_signTxn',
   params: [
-    {
-      txn: '<BASE64_ENCODED_TRANSACTION>'
-      // optional properties
-    }
-    // other transaction objects
+    [
+      {
+        txn: '<BASE64_ENCODED_TRANSACTION>'
+        // optional properties
+      }
+      // other transaction objects
+    ]
+    // other transaction arrays
   ]
 }
 
