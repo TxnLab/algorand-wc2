@@ -1,4 +1,4 @@
-import algosdk, { algosToMicroalgos, microalgosToAlgos } from 'algosdk'
+import algosdk, { algosToMicroalgos, isValidAddress, microalgosToAlgos } from 'algosdk'
 import { useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import useWalletConnectClient from '@/hooks/useWalletConnectClient'
@@ -51,11 +51,42 @@ export default function useTransaction() {
   const [receiver, setReceiver] = useState<string>('')
   const [amount, setAmount] = useState<string>('')
 
+  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+
+    // matches integers or floats up to 6 decimal places
+    const regExp = /^\d+(?:\.\d{0,6})?$/gm
+
+    if (value !== '' && value.match(regExp) === null) {
+      return
+    }
+
+    setAmount(value)
+  }
+
+  const isReceiverValid = useMemo(() => isValidAddress(receiver), [receiver])
+  const isReceiverInvalid = useMemo(
+    () => receiver !== '' && !isReceiverValid,
+    [isReceiverValid, receiver]
+  )
+
+  const isAmountValid = useMemo(() => {
+    const maxAmount = (sender?.availableBalance ?? 0) - 0.001
+    return amount !== '' && Number(amount) <= maxAmount
+  }, [amount, sender?.availableBalance])
+
+  const isAmountInvalid = useMemo(() => amount !== '' && !isAmountValid, [amount, isAmountValid])
+
+  const isFormValid = useMemo(() => {
+    const isSenderValid = isValidAddress(sender?.address ?? '')
+    return isSenderValid && isReceiverValid && isAmountValid
+  }, [isAmountValid, isReceiverValid, sender])
+
   const TOAST_ID = 'transaction'
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!client || !session || !sender || !receiver || !amount) {
+    if (!client || !session || !sender || !isFormValid) {
       return
     }
 
@@ -107,8 +138,13 @@ export default function useTransaction() {
     receiver,
     setReceiver,
     amount,
-    setAmount,
-    handleFormSubmit
+    handleAmountChange,
+    handleFormSubmit,
+    isReceiverValid,
+    isReceiverInvalid,
+    isAmountValid,
+    isAmountInvalid,
+    isFormValid
   }
 }
 

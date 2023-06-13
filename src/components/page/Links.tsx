@@ -3,7 +3,7 @@ import { VscGithub } from 'react-icons/vsc'
 
 export default function Links() {
   return (
-    <p className="mt-12 sm:mt-16 space-y-4 sm:flex sm:items-center sm:justify-center sm:space-y-0 sm:space-x-4">
+    <p className="mt-8 space-y-4 sm:flex sm:items-center sm:justify-center sm:space-y-0 sm:space-x-4">
       <a
         href="https://github.com/TxnLab/algorand-wc2"
         target="_blank"

@@ -4,7 +4,7 @@ import Links from '@/components/page/Links'
 
 export default function Home() {
   return (
-    <main className="relative isolate">
+    <main className="relative flex-1 isolate">
       <div
         className="absolute inset-x-0 top-4 -z-10 flex transform-gpu justify-center overflow-hidden blur-3xl"
         aria-hidden="true"
@@ -20,7 +20,7 @@ export default function Home() {
 
       <PageHeader />
 
-      <div className="mx-auto max-w-7xl pb-24 sm:pb-32 px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl py-16 sm:py-20 px-6 lg:px-8">
         <PageContent />
         <Links />
       </div>

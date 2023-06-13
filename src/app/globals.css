@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Algo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/Algo.woff2') format('woff2'), url('/Algo.woff') format('woff'),
+    url('/Algo.ttf') format('truetype');
+}
