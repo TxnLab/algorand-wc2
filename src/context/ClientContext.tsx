@@ -37,9 +37,9 @@ const web3Modal = new Web3Modal({
   themeMode: 'light',
   walletConnectVersion: 2,
   // Suggest Fireblocks Desktop wallet
-  // explorerRecommendedWalletIds: [
-  //   '5864e2ced7c293ed18ac35e0db085c09ed567d67346ccb6f58a0327a75137489'
-  // ],
+  explorerRecommendedWalletIds: [
+    '5864e2ced7c293ed18ac35e0db085c09ed567d67346ccb6f58a0327a75137489'
+  ],
   explorerExcludedWalletIds: 'ALL'
 })
 
